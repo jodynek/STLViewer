@@ -6,7 +6,7 @@ block_cipher = None
 hiddenimports=['vtkmodules','vtkmodules.all','vtkmodules.qt.QVTKRenderWindowInteractor','vtkmodules.util','vtkmodules.util.numpy_support','vtkmodules.numpy_interface', 'vtkmodules.numpy_interface.dataset_adapter']
 
 a = Analysis(
-    ['main.py'],
+    ['main.pyw'],
     pathex=[],
     binaries=[],
     datas=[],

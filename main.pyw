@@ -1,10 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 import sys
 
 import vtk
 from PyQt5 import Qt
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+from os.path import exists
+
 
 
 class MainWindow(Qt.QMainWindow):
@@ -57,7 +59,9 @@ class MainWindow(Qt.QMainWindow):
 
         # load default STL
         filename = "Skull.stl"
-        self.loadSTL(filename)
+        file_exists = exists(filename)
+        if file_exists:
+            self.loadSTL(filename)
 
         # set main window
         self.setGeometry(300, 300, 800, 600)
