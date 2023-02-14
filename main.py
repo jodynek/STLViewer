@@ -20,8 +20,20 @@ class MainWindow(Qt.QMainWindow):
         self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
         self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
 
-        # Create source
         filename = "skull.STL"
+        self.loadSTL(filename)
+        #self.showFileDialog()
+
+        self.frame.setLayout(self.vl)
+        self.setCentralWidget(self.frame)
+
+        self.show()
+        self.iren.Initialize()
+        self.iren.Start()
+
+    # load STL file
+    def loadSTL(self, filename):
+        # Create source
         self.reader.SetFileName(filename)
 
         transform = vtk.vtkTransform()
@@ -42,20 +54,12 @@ class MainWindow(Qt.QMainWindow):
         self.ren.AddActor(actor)
         self.ren.ResetCamera()
 
-        self.frame.setLayout(self.vl)
-        self.setCentralWidget(self.frame)
-
-        self.show()
-        self.iren.Initialize()
-        self.iren.Start()
-
-    def showDialog(self):
+    # display STL file selection dialog
+    def showFileDialog(self):
         fname = Qt.QFileDialog.getOpenFileName(self, 'Open file', '', 'STL (*.stl)')
         f = open(fname[0], 'r')
         with f:
-            data = f.read()
-            # self.textEdit.setText(data)
-            self.vtkView(str(fname[0]))
+            self.loadSTL(str(fname[0]))
 
 
 if __name__ == "__main__":
