@@ -4,7 +4,7 @@ import sys
 from os.path import exists
 
 import vtk
-from PyQt5 import Qt, QtCore, QtGui
+from PyQt5 import Qt, QtCore
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 
