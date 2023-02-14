@@ -4,7 +4,7 @@ import sys
 from os.path import exists
 
 import vtk
-from PyQt5 import Qt, QtCore
+from PyQt5 import Qt, QtCore, QtGui
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 
@@ -53,14 +53,21 @@ class MainWindow(Qt.QMainWindow):
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
 
+        aboutAction = Qt.QAction('About', self)
+        aboutAction.setStatusTip('About STLViewer application')
+        aboutAction.triggered.connect(self.aboutInfo)
+
         # display statusbar
         self.statusBar()
+        self.statusBar().showMessage("Ready")
 
         # display menu
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(openFile)
         fileMenu.addAction(exitAction)
+        fileMenu = menubar.addMenu('&Help')
+        fileMenu.addAction(aboutAction)
 
         # display toolbar
         toolbar = self.addToolBar('Exit')
@@ -124,6 +131,11 @@ class MainWindow(Qt.QMainWindow):
             f = open(filename[0], 'r')
             with f:
                 self.loadSTL(str(filename[0]))
+
+    def aboutInfo(self):
+        Qt.QMessageBox.about(self, "About STLViewer",
+                             "Version 1.0\n"
+                             "Copyright 2023 Petr Jodas")
 
 
 if __name__ == "__main__":
