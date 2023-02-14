@@ -11,25 +11,56 @@ class MainWindow(Qt.QMainWindow):
     def __init__(self, parent=None):
         Qt.QMainWindow.__init__(self, parent)
 
+        self.initUI()
+
+    # GUI definition
+    def initUI(self):
+        # actions definition
+        openFile = Qt.QAction(Qt.QIcon('icons/open-24.png'), 'Open', self)
+        openFile.setShortcut('Ctrl+O')
+        openFile.setStatusTip('Open STL File')
+        openFile.triggered.connect(self.showSTLFileDialog)
+
+        exitAction = Qt.QAction(Qt.QIcon('icons/close-window-24.png'), 'Exit', self)
+        exitAction.setShortcut('Ctrl+Q')
+        exitAction.setStatusTip('Exit application')
+        exitAction.triggered.connect(self.close)
+
+        # display statusbar
+        self.statusBar()
+
+        # display menu
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('&File')
+        fileMenu.addAction(openFile)
+        fileMenu.addAction(exitAction)
+
+        # display toolbar
+        toolbar = self.addToolBar('Exit')
+        toolbar.addAction(openFile)
+        toolbar.addAction(exitAction)
+
         self.frame = Qt.QFrame()
         self.vl = Qt.QVBoxLayout()
         self.vtkWidget = QVTKRenderWindowInteractor(self.frame)
         self.vl.addWidget(self.vtkWidget)
-
         self.ren = vtk.vtkRenderer()
         self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
-        self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
-
-        filename = "skull.STL"
-        self.loadSTL(filename)
-        #self.showFileDialog()
-
         self.frame.setLayout(self.vl)
         self.setCentralWidget(self.frame)
 
-        self.show()
+        self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
         self.iren.Initialize()
         self.iren.Start()
+
+        # load default STL
+        filename = "skull.STL"
+        self.loadSTL(filename)
+
+        # set main window
+        self.setGeometry(300, 300, 800, 600)
+        self.setWindowTitle('Simple STL Viewer')
+        self.show()
 
     # load STL file
     def loadSTL(self, filename):
@@ -55,11 +86,12 @@ class MainWindow(Qt.QMainWindow):
         self.ren.ResetCamera()
 
     # display STL file selection dialog
-    def showFileDialog(self):
-        fname = Qt.QFileDialog.getOpenFileName(self, 'Open file', '', 'STL (*.stl)')
-        f = open(fname[0], 'r')
-        with f:
-            self.loadSTL(str(fname[0]))
+    def showSTLFileDialog(self):
+        filename = Qt.QFileDialog.getOpenFileName(self, 'Open file', '', 'STL (*.stl)')
+        if filename[0] != "":
+            f = open(filename[0], 'r')
+            with f:
+                self.loadSTL(str(filename[0]))
 
 
 if __name__ == "__main__":
