@@ -3,7 +3,7 @@
 import sys
 
 import vtk
-from PyQt5 import Qt
+from PyQt5 import Qt, QtCore
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from os.path import exists
 
@@ -15,7 +15,31 @@ class MainWindow(Qt.QMainWindow):
     def __init__(self, parent=None):
         Qt.QMainWindow.__init__(self, parent)
 
+        self.setAcceptDrops(True)
         self.initUI()
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasUrls:
+            event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls:
+            event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+            link = event.mimeData().urls()[0]
+            # load dropped STL
+            self.loadSTL(link.toLocalFile())
+        else:
+            event.ignore()
 
     # GUI definition
     def initUI(self):
@@ -58,7 +82,10 @@ class MainWindow(Qt.QMainWindow):
         self.iren.Start()
 
         # load default STL
-        filename = "Skull.stl"
+        if len(sys.argv) > 1:
+            filename = sys.argv[1]
+        else:
+            filename = "Skull.stl"
         file_exists = exists(filename)
         if file_exists:
             self.loadSTL(filename)
@@ -89,6 +116,7 @@ class MainWindow(Qt.QMainWindow):
 
         self.ren.AddActor(actor)
         self.ren.ResetCamera()
+        self.vtkWidget.repaint()
 
     # display STL file selection dialog
     def showSTLFileDialog(self):
