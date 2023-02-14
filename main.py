@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 
 import vtk
@@ -54,7 +56,7 @@ class MainWindow(Qt.QMainWindow):
         self.iren.Start()
 
         # load default STL
-        filename = "skull.STL"
+        filename = "Skull.stl"
         self.loadSTL(filename)
 
         # set main window
@@ -68,7 +70,6 @@ class MainWindow(Qt.QMainWindow):
         self.reader.SetFileName(filename)
 
         transform = vtk.vtkTransform()
-
         transformFilter = vtk.vtkTransformPolyDataFilter()
         transformFilter.SetTransform(transform)
         transformFilter.SetInputConnection(self.reader.GetOutputPort())
