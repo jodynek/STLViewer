@@ -90,7 +90,7 @@ class MainWindow(Qt.QMainWindow):
             self.loadSTL(filename)
 
         # set main window
-        self.setGeometry(300, 300, 800, 600)
+        self.setGeometry(300, 300, 1280, 1024)
         self.setWindowTitle('Simple STL Viewer')
         self.show()
 

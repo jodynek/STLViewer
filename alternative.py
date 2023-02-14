@@ -1,7 +1,6 @@
-import numpy as np
-from stl import mesh
-from mpl_toolkits import mplot3d
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
+from stl import mesh
 
 # Load the STL file
 stl_mesh = mesh.Mesh.from_file('Skull.stl')
