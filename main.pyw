@@ -4,14 +4,15 @@ import sys
 from os.path import exists
 
 import qdarktheme
-import vtk
+import vtk.qt
 from PyQt6.QtCore import QSettings, QSize, QPoint, Qt
 from PyQt6.QtGui import QAction, QIcon
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFrame, QVBoxLayout
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFrame, QVBoxLayout, QFileDialog, QMessageBox
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 
 class MainWindow(QMainWindow):
+    vtk.qt.QVTKRWIBase = "QGLWidget"
     reader = vtk.vtkSTLReader()
 
     def __init__(self, parent=None):
@@ -52,7 +53,9 @@ class MainWindow(QMainWindow):
     # GUI definition
     def initUI(self):
         # theme setup
+        qdarktheme.enable_hi_dpi()
         qdarktheme.setup_theme("auto")
+
         # actions definition
         openFile = QAction(QIcon('icons/open-24.png'), 'Open', self)
         openFile.setShortcut('Ctrl+O')
@@ -145,17 +148,17 @@ class MainWindow(QMainWindow):
 
     # display STL file selection dialog
     def showSTLFileDialog(self):
-        filename = Qt.QFileDialog.getOpenFileName(self, 'Open file', '', 'STL (*.stl)')
+        filename = QFileDialog.getOpenFileName(self, 'Open file', '', 'STL (*.stl)')
         if filename[0] != "":
             f = open(filename[0], 'r')
             with f:
                 self.loadSTL(str(filename[0]))
 
     def aboutInfo(self):
-        Qt.QMessageBox.about(self, "About",
-                             "<h3>STLViewer</h3>"
-                             "<b>Version 1.0</b><br><br>"
-                             "Copyright &#169;2023 Petr Jodas")
+        QMessageBox.about(self, "About",
+                          "<h3>STLViewer</h3>"
+                          "<b>Version 1.0</b><br><br>"
+                          "Copyright &#169;2023 Petr Jodas")
 
 
 if __name__ == "__main__":
