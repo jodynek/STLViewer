@@ -3,18 +3,19 @@
 import sys
 from os.path import exists
 
-import vtk
 import qdarktheme
-from PyQt5 import Qt, QtCore
-from PyQt5.QtCore import QSettings, QPoint, QSize
+import vtk
+from PyQt6.QtCore import QSettings, QSize, QPoint, Qt
+from PyQt6.QtGui import QAction, QIcon
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFrame, QVBoxLayout
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 
-class MainWindow(Qt.QMainWindow):
+class MainWindow(QMainWindow):
     reader = vtk.vtkSTLReader()
 
     def __init__(self, parent=None):
-        Qt.QMainWindow.__init__(self, parent)
+        QMainWindow.__init__(self, parent)
 
         self.setAcceptDrops(True)
         self.initUI()
@@ -27,14 +28,14 @@ class MainWindow(Qt.QMainWindow):
 
     def dragMoveEvent(self, event):
         if event.mimeData().hasUrls:
-            event.setDropAction(QtCore.Qt.CopyAction)
+            event.setDropAction(Qt.DropAction.CopyAction)
             event.accept()
         else:
             event.ignore()
 
     def dropEvent(self, event):
         if event.mimeData().hasUrls:
-            event.setDropAction(QtCore.Qt.CopyAction)
+            event.setDropAction(Qt.DropAction.CopyAction)
             event.accept()
             link = event.mimeData().urls()[0]
             # load dropped STL
@@ -50,20 +51,20 @@ class MainWindow(Qt.QMainWindow):
 
     # GUI definition
     def initUI(self):
-        qdarktheme.setup_theme()
-
+        # theme setup
+        qdarktheme.setup_theme("auto")
         # actions definition
-        openFile = Qt.QAction(Qt.QIcon('icons/open-24.png'), 'Open', self)
+        openFile = QAction(QIcon('icons/open-24.png'), 'Open', self)
         openFile.setShortcut('Ctrl+O')
         openFile.setStatusTip('Open STL File')
         openFile.triggered.connect(self.showSTLFileDialog)
 
-        exitAction = Qt.QAction(Qt.QIcon('icons/close-window-24.png'), 'Exit', self)
+        exitAction = QAction(QIcon('icons/close-window-24.png'), 'Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
 
-        aboutAction = Qt.QAction(Qt.QIcon('icons/info-24.png'), 'About', self)
+        aboutAction = QAction(QIcon('icons/info-24.png'), 'About', self)
         aboutAction.setStatusTip('About STLViewer application')
         aboutAction.triggered.connect(self.aboutInfo)
 
@@ -87,8 +88,8 @@ class MainWindow(Qt.QMainWindow):
         toolbar.addSeparator()
         toolbar.addAction(aboutAction)
 
-        self.frame = Qt.QFrame()
-        self.vl = Qt.QVBoxLayout()
+        self.frame = QFrame()
+        self.vl = QVBoxLayout()
         self.vtkWidget = QVTKRenderWindowInteractor(self.frame)
         self.vl.addWidget(self.vtkWidget)
         self.ren = vtk.vtkRenderer()
@@ -158,6 +159,6 @@ class MainWindow(Qt.QMainWindow):
 
 
 if __name__ == "__main__":
-    app = Qt.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     window = MainWindow()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

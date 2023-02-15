@@ -1,7 +1,6 @@
 # STLViewer
-- pip install pyqt5
-- pip install vtk
-- pip install matplotlib
-- pip install numpy
+
+## Dependencies
+- pip install pyqt6
 - pip install pyqtdarktheme
-- pip install numpy-stl
+- pip install vtk
