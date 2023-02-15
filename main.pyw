@@ -1,10 +1,12 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 import sys
 from os.path import exists
 
 import vtk
+import qdarktheme
 from PyQt5 import Qt, QtCore
+from PyQt5.QtCore import QSettings, QPoint, QSize
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 
@@ -40,8 +42,16 @@ class MainWindow(Qt.QMainWindow):
         else:
             event.ignore()
 
+    def closeEvent(self, event):
+        # Write window size and position to config file
+        self.settings.setValue("size", self.size())
+        self.settings.setValue("pos", self.pos())
+        super().closeEvent(event)
+
     # GUI definition
     def initUI(self):
+        qdarktheme.setup_theme()
+
         # actions definition
         openFile = Qt.QAction(Qt.QIcon('icons/open-24.png'), 'Open', self)
         openFile.setShortcut('Ctrl+O')
@@ -53,7 +63,7 @@ class MainWindow(Qt.QMainWindow):
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
 
-        aboutAction = Qt.QAction('About', self)
+        aboutAction = Qt.QAction(Qt.QIcon('icons/info-24.png'), 'About', self)
         aboutAction.setStatusTip('About STLViewer application')
         aboutAction.triggered.connect(self.aboutInfo)
 
@@ -65,6 +75,7 @@ class MainWindow(Qt.QMainWindow):
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(openFile)
+        fileMenu.addSeparator()
         fileMenu.addAction(exitAction)
         fileMenu = menubar.addMenu('&Help')
         fileMenu.addAction(aboutAction)
@@ -73,6 +84,8 @@ class MainWindow(Qt.QMainWindow):
         toolbar = self.addToolBar('Exit')
         toolbar.addAction(openFile)
         toolbar.addAction(exitAction)
+        toolbar.addSeparator()
+        toolbar.addAction(aboutAction)
 
         self.frame = Qt.QFrame()
         self.vl = Qt.QVBoxLayout()
@@ -97,7 +110,12 @@ class MainWindow(Qt.QMainWindow):
             self.loadSTL(filename)
 
         # set main window
-        self.setGeometry(300, 300, 1280, 1024)
+        # Load window size and position from settings
+        self.settings = QSettings('STLViewer', 'MainWindow')
+        # Initial window size/pos last saved. Use default values for first time
+        self.resize(self.settings.value("size", QSize(1280, 1024)))
+        self.move(self.settings.value("pos", QPoint(200, 200)))
+
         self.setWindowTitle('Simple STL Viewer')
         self.show()
 
@@ -133,9 +151,10 @@ class MainWindow(Qt.QMainWindow):
                 self.loadSTL(str(filename[0]))
 
     def aboutInfo(self):
-        Qt.QMessageBox.about(self, "About STLViewer",
-                             "Version 1.0\n"
-                             "Copyright 2023 Petr Jodas")
+        Qt.QMessageBox.about(self, "About",
+                             "<h3>STLViewer</h3>"
+                             "<b>Version 1.0</b><br><br>"
+                             "Copyright &#169;2023 Petr Jodas")
 
 
 if __name__ == "__main__":
