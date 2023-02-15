@@ -34,7 +34,7 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
@@ -43,7 +43,8 @@ exe = EXE(
     entitlements_file=None,
 )
 
-a.datas += Tree(os.path.join(spec_root, 'icons'), 'icons')
+a.datas += Tree(os.path.join(spec_root, 'icons'), 'icons') + \
+           Tree(os.path.join(spec_root, 'examples'), 'examples')
 
 coll = COLLECT(
     exe,

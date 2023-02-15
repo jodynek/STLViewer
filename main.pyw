@@ -52,9 +52,6 @@ class MainWindow(QMainWindow):
 
     # GUI definition
     def initUI(self):
-        # theme setup
-        qdarktheme.enable_hi_dpi()
-        qdarktheme.setup_theme("auto")
 
         # actions definition
         openFile = QAction(QIcon('icons/open-24.png'), 'Open', self)
@@ -108,7 +105,7 @@ class MainWindow(QMainWindow):
         if len(sys.argv) > 1:
             filename = sys.argv[1]
         else:
-            filename = "Skull.stl"
+            filename = "examples/Skull.stl"
         file_exists = exists(filename)
         if file_exists:
             self.loadSTL(filename)
@@ -163,5 +160,10 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+
+    # theme setup
+    qdarktheme.enable_hi_dpi()
+    qdarktheme.setup_theme("auto")
+
     window = MainWindow()
     sys.exit(app.exec())
