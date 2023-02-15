@@ -160,10 +160,11 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-
     # theme setup
     qdarktheme.enable_hi_dpi()
     qdarktheme.setup_theme("auto")
 
     window = MainWindow()
+    app.setWindowIcon(QIcon('icons/main.ico'))
+    window.setWindowIcon(QIcon('icons/main.ico'))
     sys.exit(app.exec())

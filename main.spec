@@ -34,13 +34,14 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=False,
+    upx=True,
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon='icons\main.ico',
 )
 
 a.datas += Tree(os.path.join(spec_root, 'icons'), 'icons') + \
