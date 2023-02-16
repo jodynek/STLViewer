@@ -64,6 +64,11 @@ class MainWindow(QMainWindow):
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(self.close)
 
+        resetCameraAction = QAction(QIcon('icons/camera-24.png'), 'Camera reset', self)
+        resetCameraAction.setShortcut('Ctrl+R')
+        resetCameraAction.setStatusTip('Reset camera')
+        resetCameraAction.triggered.connect(self.resetCamera)
+
         aboutAction = QAction(QIcon('icons/info-24.png'), 'About', self)
         aboutAction.setStatusTip('About STLViewer application')
         aboutAction.triggered.connect(self.aboutInfo)
@@ -85,6 +90,8 @@ class MainWindow(QMainWindow):
         toolbar = self.addToolBar('Exit')
         toolbar.addAction(openFile)
         toolbar.addAction(exitAction)
+        toolbar.addSeparator()
+        toolbar.addAction(resetCameraAction)
         toolbar.addSeparator()
         toolbar.addAction(aboutAction)
 
@@ -156,6 +163,10 @@ class MainWindow(QMainWindow):
                           "<h3>STLViewer</h3>"
                           "<b>Version 1.0</b><br><br>"
                           "Copyright &#169;2023 Petr Jodas")
+
+    def resetCamera(self):
+        self.ren.ResetCamera()
+        self.vtkWidget.repaint()
 
 
 if __name__ == "__main__":
