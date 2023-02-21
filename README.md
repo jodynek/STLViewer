@@ -1,4 +1,5 @@
 # STLViewer
+Simple program for viewing STL files.
 
 ## Dependencies
 - pip install pyqt6

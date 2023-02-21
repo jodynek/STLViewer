@@ -112,7 +112,7 @@ class MainWindow(QMainWindow):
         if len(sys.argv) > 1:
             filename = sys.argv[1]
         else:
-            filename = "examples/Skull.stl"
+            filename = "examples/Ashtray.stl"
         file_exists = exists(filename)
         if file_exists:
             self.loadSTL(filename)
