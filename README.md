@@ -2,6 +2,6 @@
 Simple program for viewing STL files.
 
 ## Dependencies
-- pip install pyqt6
-- pip install pyqtdarktheme
-- pip install vtk
+pyqt6, pyqtdarktheme, vtk
+
+- pip install -r requirements.txt
